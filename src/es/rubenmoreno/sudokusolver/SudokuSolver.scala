@@ -11,22 +11,22 @@ object SudokuSolver extends App {
 
     println("Squares:")
 
-    println(Square.score(Square(board.cells, 0, 0)) + " " +
-      Square.score(Square(board.cells, 0, 1)) + " " +
-      Square.score(Square(board.cells, 0, 2)))
-    println(Square.score(Square(board.cells, 1, 0)) + " " +
-      Square.score(Square(board.cells, 1, 1)) + " " +
-      Square.score(Square(board.cells, 1, 2)))
-    println(Square.score(Square(board.cells, 2, 0)) + " " +
-      Square.score(Square(board.cells, 2, 1)) + " " +
-      Square.score(Square(board.cells, 2, 2)))
+    println(Square(board.cells, 0, 0).score + " " +
+      Square(board.cells, 0, 1).score + " " +
+      Square(board.cells, 0, 2).score)
+    println(Square(board.cells, 1, 0).score + " " +
+      Square(board.cells, 1, 1).score + " " +
+      Square(board.cells, 1, 2).score)
+    println(Square(board.cells, 2, 0).score + " " +
+      Square(board.cells, 2, 1).score + " " +
+      Square(board.cells, 2, 2).score)
   }
 
   def debugColumns(board: Board) = {
     println("Columns:")
 
     val range = 0 until Board.Size
-    val scores = range.map(idx => Column.score(Column(board.cells, idx)))
+    val scores = range.map(idx => Column(board.cells, idx).score)
     println(scores.mkString(" "))
   }
 
@@ -34,7 +34,7 @@ object SudokuSolver extends App {
     println("Rows:")
 
     val range = 0 until Board.Size
-    val scores = range.map(idx => Row.score(Row(board.cells, idx)))
+    val scores = range.map(idx => Row(board.cells, idx).score)
     println(scores.mkString(" "))
   }
 
@@ -43,7 +43,9 @@ object SudokuSolver extends App {
     println(board.score)
   }
 
-  val board = Board(Array.fill(Board.Size * Board.Size) { scala.util.Random.nextInt(Board.Valid) + 1 })
+  def createRandomBoard() = Board(Array.fill(Board.Size * Board.Size)(scala.util.Random.nextInt(Board.Valid) + 1))
+
+  val board = createRandomBoard()
   println(board)
 
   debugSquares(board)

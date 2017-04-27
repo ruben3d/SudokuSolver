@@ -1,36 +1,38 @@
 package es.rubenmoreno.sudokusolver.board
 
-case class Row(cells: Array[Int], idx: Int)
+class Row(cells: Array[Int], idx: Int) {
 
-object Row {
+  val score = computeScore(cells, idx)
 
-  val size = Board.Size
+  private def computeScore(cells: Array[Int], idx: Int): Int = {
 
-  def score(r: Row): Int = {
+    def createMarkers(cells: Array[Int], idx: Int) = {
 
-    def createMarkers(r: Row) = {
-
-      def boardPos(i: Int, j: Int): Int = i * Board.Size + j
+      def boardPos(i: Int, j: Int) = i * Board.Size + j
 
       val markers = Array.fill[Int](Board.Valid)(0)
 
       for {
-        j <- 0 to size - 1
-      } markers(r.cells(boardPos(r.idx, j)) - 1) += 1
+        j <- 0 until Board.Size
+      } markers(cells(boardPos(idx, j)) - 1) += 1
 
       markers
     }
 
-    def calculate(markers: Array[Int]): Int = {
-      markers.foldLeft(0)((acc, n) => {
+    def calculate(markers: Array[Int]): Int =
+      markers.foldLeft(0)((acc, n) =>
         if (n > 1)
           acc + n * n
         else
-          acc
-      })
-    }
+          acc)
 
-    val markers = createMarkers(r)
+    val markers = createMarkers(cells, idx)
     calculate(markers)
   }
+}
+
+object Row {
+
+  def apply(cells: Array[Int], idx: Int): Row = new Row(cells, idx)
+
 }

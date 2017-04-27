@@ -1,39 +1,42 @@
 package es.rubenmoreno.sudokusolver.board
 
 // row,col position of square [0,2]
-case class Square(cells: Array[Int], row: Int, col: Int)
+class Square(cells: Array[Int], row: Int, col: Int) {
 
-object Square {
+  val score = computeScore(cells, row, col)
 
-  val size = 3
-  val range = 3
+  private def computeScore(cells: Array[Int], row: Int, col: Int): Int = {
 
-  def score(sq: Square): Int = {
+    def createMarkers(cells: Array[Int], row: Int, col: Int) = {
 
-    def createMarkers(sq: Square) = {
-
-      def boardPos(i: Int, j: Int): Int = (i + sq.row * size) * Board.Size + sq.col * size + j
+      def boardPos(i: Int, j: Int) = (i + row * Square.Size) * Board.Size + col * Square.Size + j
 
       val markers = Array.fill[Int](Board.Valid)(0)
 
       for {
-        i <- 0 to size - 1
-        j <- 0 to size - 1
-      } markers(sq.cells(boardPos(i, j)) - 1) += 1
+        i <- 0 until Square.Size
+        j <- 0 until Square.Size
+      } markers(cells(boardPos(i, j)) - 1) += 1
 
       markers
     }
 
-    def calculate(markers: Array[Int]): Int = {
-      markers.foldLeft(0)((acc, n) => {
+    def calculate(markers: Array[Int]): Int =
+      markers.foldLeft(0)((acc, n) =>
         if (n > 1)
           acc + n * n
         else
-          acc
-      })
-    }
+          acc)
 
-    val markers = createMarkers(sq)
+    val markers = createMarkers(cells, row, col)
     calculate(markers)
   }
+}
+
+object Square {
+
+  val Size = 3
+  val Range = 3
+
+  def apply(cells: Array[Int], row: Int, col: Int): Square = new Square(cells, row, col)
 }
