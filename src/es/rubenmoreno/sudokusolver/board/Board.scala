@@ -55,4 +55,24 @@ object Board {
   val Valid = 9
 
   def apply(cells: Array[Int]): Board = new Board(cells)
+
+  // enumerator: extracts the 9 elements from the cells to compute a score
+  def computeSubScore(cells: Array[Int], enumerator: Array[Int] => Array[Int]): Int = {
+
+    def createMarkers(elements: Array[Int]) =
+      elements.foldLeft(Array.fill[Int](Valid)(0))((markers, e) => {
+        markers(e - 1) += 1
+        markers
+      })
+
+    def calculate(markers: Array[Int]) =
+      markers.foldLeft(0)((acc, n) =>
+        if (n > 1)
+          acc + n * n
+        else
+          acc)
+
+    val markers = createMarkers(enumerator(cells))
+    calculate(markers)
+  }
 }

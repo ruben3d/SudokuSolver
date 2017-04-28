@@ -7,29 +7,13 @@ class Square(cells: Array[Int], row: Int, col: Int) {
 
   private def computeScore(cells: Array[Int], row: Int, col: Int): Int = {
 
-    def createMarkers(cells: Array[Int], row: Int, col: Int) = {
+    def boardPos(i: Int, j: Int) = (i + row * Square.Size) * Board.Size + col * Square.Size + j
 
-      def boardPos(i: Int, j: Int) = (i + row * Square.Size) * Board.Size + col * Square.Size + j
-
-      val markers = Array.fill[Int](Board.Valid)(0)
-
+    Board.computeSubScore(cells, (c: Array[Int]) =>
       for {
-        i <- 0 until Square.Size
-        j <- 0 until Square.Size
-      } markers(cells(boardPos(i, j)) - 1) += 1
-
-      markers
-    }
-
-    def calculate(markers: Array[Int]): Int =
-      markers.foldLeft(0)((acc, n) =>
-        if (n > 1)
-          acc + n * n
-        else
-          acc)
-
-    val markers = createMarkers(cells, row, col)
-    calculate(markers)
+        i <- 0 until Square.Size toArray;
+        j <- 0 until Square.Size toArray
+      } yield cells(boardPos(i, j)))
   }
 }
 
