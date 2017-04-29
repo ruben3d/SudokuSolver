@@ -3,10 +3,9 @@ package es.rubenmoreno.sudokusolver.board
 import scala.collection.immutable.Vector
 
 // Row after row
-class Board(c: Array[Int]) {
+class Board(val cells: Array[Int]) {
 
-  val cells = c
-  val score = computeScore(c)
+  val score = computeScore(cells)
 
   private def computeScore(cells: Array[Int]): Int = {
 
