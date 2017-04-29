@@ -5,9 +5,11 @@ import scala.collection.immutable.Vector
 // Row after row
 class Board(val cells: Array[Int]) {
 
-  val score = computeScore(cells)
+  val score: Option[Int] = computeScore(cells)
 
-  private def computeScore(cells: Array[Int]): Int = {
+  val isTemplate: Boolean = cells.exists(_ == 0)
+
+  private def computeScore(cells: Array[Int]): Option[Int] = {
 
     def computeSquareScores(cells: Array[Int]): Int = {
 
@@ -29,7 +31,10 @@ class Board(val cells: Array[Int]) {
       coords.foldLeft(0)((acc, coord) => acc + Row(cells, coord).score)
     }
 
-    computeSquareScores(cells) + computeColumnScores(cells) + computeRowScores(cells)
+    if (isTemplate)
+      None
+    else
+      Some(computeSquareScores(cells) + computeColumnScores(cells) + computeRowScores(cells))
   }
 
   override def toString: String = {

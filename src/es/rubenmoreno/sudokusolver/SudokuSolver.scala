@@ -40,7 +40,7 @@ object SudokuSolver extends App {
 
   def debugBoard(board: Board) = {
     println("Board:")
-    println(board.score)
+    println(board.score.getOrElse(-1))
   }
 
   def createRandomBoard() = Board(Array.fill(Board.Size * Board.Size)(scala.util.Random.nextInt(Board.Valid) + 1))
