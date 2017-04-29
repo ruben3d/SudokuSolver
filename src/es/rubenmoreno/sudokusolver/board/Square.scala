@@ -11,8 +11,8 @@ class Square(cells: Array[Int], row: Int, col: Int) {
 
     Board.computeSubScore(cells, (c: Array[Int]) =>
       for {
-        i <- 0 until Square.Size toArray;
-        j <- 0 until Square.Size toArray
+        i <- 0 until Square.Size
+        j <- 0 until Square.Size
       } yield cells(boardPos(i, j)))
   }
 }

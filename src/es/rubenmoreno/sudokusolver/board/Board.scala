@@ -56,9 +56,9 @@ object Board {
   def apply(cells: Array[Int]): Board = new Board(cells)
 
   // enumerator: extracts the 9 elements from the cells to compute a score
-  def computeSubScore(cells: Array[Int], enumerator: Array[Int] => Array[Int]): Int = {
+  def computeSubScore(cells: Array[Int], enumerator: Array[Int] => Seq[Int]): Int = {
 
-    def createMarkers(elements: Array[Int]) =
+    def createMarkers(elements: Seq[Int]) =
       elements.foldLeft(Array.fill[Int](Valid)(0))((markers, e) => {
         markers(e - 1) += 1
         markers

@@ -10,7 +10,7 @@ class Row(cells: Array[Int], idx: Int) {
 
     Board.computeSubScore(cells, (c: Array[Int]) =>
       for {
-        j <- 0 until Board.Size toArray
+        j <- 0 until Board.Size
       } yield cells(boardPos(idx, j)))
   }
 }
