@@ -1,7 +1,7 @@
 package es.rubenmoreno.sudokusolver.board
 
 // row,col position of square [0,2]
-class Square(cells: Array[Cell], row: Int, col: Int) {
+private class Square(cells: Array[Cell], row: Int, col: Int) {
 
   val score = computeScore(cells, row, col)
 
@@ -17,7 +17,7 @@ class Square(cells: Array[Cell], row: Int, col: Int) {
   }
 }
 
-object Square {
+private object Square {
 
   val Size = 3
   val Range = 3

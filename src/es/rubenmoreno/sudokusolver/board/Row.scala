@@ -1,6 +1,6 @@
 package es.rubenmoreno.sudokusolver.board
 
-class Row(cells: Array[Cell], idx: Int) {
+private class Row(cells: Array[Cell], idx: Int) {
 
   val score = computeScore(cells, idx)
 
@@ -15,7 +15,7 @@ class Row(cells: Array[Cell], idx: Int) {
   }
 }
 
-object Row {
+private object Row {
 
   def apply(cells: Array[Cell], idx: Int): Row = new Row(cells, idx)
 
