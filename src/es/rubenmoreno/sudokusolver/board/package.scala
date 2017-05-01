@@ -2,6 +2,20 @@ package es.rubenmoreno.sudokusolver
 
 package object board {
 
+  def debugPrintLoadedBoard(board: Option[Board]) = {
+    board.foreach(board => debugPrintBoard(board))
+  }
+
+  def debugPrintBoard(board: Board) = {
+    println(board)
+    board.score.foreach(_ => {
+      debugPrintSquareScores(board)
+      debugPrintColumnScores(board)
+      debugPrintRowScores(board)
+      debugPrintBoardScore(board)
+    })
+  }
+
   def debugPrintSquareScores(board: Board) = {
 
     println("Squares:")

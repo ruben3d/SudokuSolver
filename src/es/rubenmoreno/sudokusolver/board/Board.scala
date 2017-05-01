@@ -1,16 +1,19 @@
 package es.rubenmoreno.sudokusolver.board
 
+import scala.io.Source
+import scala.util.Random
+
 // Row after row
 class Board(val cells: Array[Cell]) {
-
-  val score: Option[Int] = computeScore(cells)
 
   val isTemplate: Boolean = cells.exists(_ match {
     case Empty => true
     case _     => false
   })
 
-  private def computeScore(cells: Array[Cell]): Option[Int] = {
+  val score: Option[Int] = computeScore(cells, isTemplate)
+
+  private def computeScore(cells: Array[Cell], isTemplate: Boolean): Option[Int] = {
 
     def computeSquareScores(cells: Array[Cell]): Int = {
 
@@ -53,6 +56,24 @@ class Board(val cells: Array[Cell]) {
 
     body + bar
   }
+
+  def populate: Board = {
+    val newCells = cells.map(cell => cell match {
+      case Empty => FreeCell(Random.nextInt(Board.Valid) + 1)
+      case _     => cell
+    })
+    Board(newCells)
+  }
+
+  def cross(that: Board): (Board, Board) = {
+    val pivot = Random.nextInt(cells.length)
+    val seg0 = cells.splitAt(pivot)
+    val seg1 = that.cells.splitAt(pivot)
+    val cells0 = seg0._1 ++ seg1._2
+    val cells1 = seg1._1 ++ seg0._2
+
+    (Board(cells0), Board(cells1))
+  }
 }
 
 object Board {
@@ -60,6 +81,27 @@ object Board {
   val Valid = 9
 
   def apply(cells: Array[Cell]): Board = new Board(cells)
+
+  def load(file: String): Option[Board] = {
+
+    try {
+
+      val tokens = Source.fromFile(file).getLines().flatMap(_ split (" "))
+      val cells = tokens.map(token => token toInt match {
+        case 0                          => Empty
+        case i if 1 to Valid contains i => LockedCell(i)
+        case _                          => throw new IllegalArgumentException
+      }).toArray[Cell]
+
+      if (cells.length == Size * Size)
+        Some(Board(cells))
+      else
+        throw new IllegalArgumentException
+
+    } catch {
+      case e: Throwable => None
+    }
+  }
 
   // enumerator: extracts the 9 elements from the cells to compute a score
   def computeSubScore(cells: Array[Cell], enumerator: Array[Cell] => Seq[Cell]): Int = {
