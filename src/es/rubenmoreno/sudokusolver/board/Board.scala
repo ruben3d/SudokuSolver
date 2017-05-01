@@ -1,17 +1,18 @@
 package es.rubenmoreno.sudokusolver.board
 
-import scala.collection.immutable.Vector
-
 // Row after row
-class Board(val cells: Array[Int]) {
+class Board(val cells: Array[Cell]) {
 
   val score: Option[Int] = computeScore(cells)
 
-  val isTemplate: Boolean = cells.exists(_ == 0)
+  val isTemplate: Boolean = cells.exists(_ match {
+    case Empty => true
+    case _     => false
+  })
 
-  private def computeScore(cells: Array[Int]): Option[Int] = {
+  private def computeScore(cells: Array[Cell]): Option[Int] = {
 
-    def computeSquareScores(cells: Array[Int]): Int = {
+    def computeSquareScores(cells: Array[Cell]): Int = {
 
       val coords = for {
         i <- 0 until Square.Range
@@ -21,12 +22,12 @@ class Board(val cells: Array[Int]) {
       coords.foldLeft(0)((acc, coord) => acc + Square(cells, coord._1, coord._2).score)
     }
 
-    def computeColumnScores(cells: Array[Int]): Int = {
+    def computeColumnScores(cells: Array[Cell]): Int = {
       val coords = 0 until Board.Size
       coords.foldLeft(0)((acc, coord) => acc + Column(cells, coord).score)
     }
 
-    def computeRowScores(cells: Array[Int]): Int = {
+    def computeRowScores(cells: Array[Cell]): Int = {
       val coords = 0 until Board.Size
       coords.foldLeft(0)((acc, coord) => acc + Row(cells, coord).score)
     }
@@ -58,16 +59,27 @@ object Board {
   val Size = 9
   val Valid = 9
 
-  def apply(cells: Array[Int]): Board = new Board(cells)
+  def apply(cells: Array[Cell]): Board = new Board(cells)
 
   // enumerator: extracts the 9 elements from the cells to compute a score
-  def computeSubScore(cells: Array[Int], enumerator: Array[Int] => Seq[Int]): Int = {
+  def computeSubScore(cells: Array[Cell], enumerator: Array[Cell] => Seq[Cell]): Int = {
 
-    def createMarkers(elements: Seq[Int]) =
-      elements.foldLeft(Array.fill[Int](Valid)(0))((markers, e) => {
-        markers(e - 1) += 1
-        markers
+    def createMarkers(elements: Seq[Cell]) = {
+
+      val m = Array.fill[Int](Valid)(0)
+
+      elements.foldLeft(m)((markers, e) => e match {
+        case Empty => throw new IllegalArgumentException("A board with an Empty cell can not be scored.")
+        case FreeCell(v) => {
+          markers(v - 1) += 1
+          markers
+        }
+        case LockedCell(v) => {
+          markers(v - 1) += 1
+          markers
+        }
       })
+    }
 
     def calculate(markers: Array[Int]) =
       markers.foldLeft(0)((acc, n) =>

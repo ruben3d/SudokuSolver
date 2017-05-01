@@ -4,6 +4,8 @@ import es.rubenmoreno.sudokusolver.board.Board
 import es.rubenmoreno.sudokusolver.board.Square
 import es.rubenmoreno.sudokusolver.board.Column
 import es.rubenmoreno.sudokusolver.board.Row
+import es.rubenmoreno.sudokusolver.board.FreeCell
+import es.rubenmoreno.sudokusolver.board.Empty
 
 object SudokuSolver extends App {
 
@@ -43,7 +45,7 @@ object SudokuSolver extends App {
     println(board.score.getOrElse(-1))
   }
 
-  def createRandomBoard() = Board(Array.fill(Board.Size * Board.Size)(scala.util.Random.nextInt(Board.Valid) + 1))
+  def createRandomBoard() = Board(Array.fill(Board.Size * Board.Size)(scala.util.Random.nextInt(Board.Valid) + 1).map(FreeCell(_)))
 
   val board = createRandomBoard()
   println(board)

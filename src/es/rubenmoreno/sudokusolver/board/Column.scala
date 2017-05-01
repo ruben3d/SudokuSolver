@@ -1,14 +1,14 @@
 package es.rubenmoreno.sudokusolver.board
 
-class Column(cells: Array[Int], idx: Int) {
+class Column(cells: Array[Cell], idx: Int) {
 
   val score = computeScore(cells, idx)
 
-  private def computeScore(cells: Array[Int], idx: Int): Int = {
+  private def computeScore(cells: Array[Cell], idx: Int): Int = {
 
     def boardPos(i: Int, j: Int) = i * Board.Size + j
 
-    Board.computeSubScore(cells, (c: Array[Int]) =>
+    Board.computeSubScore(cells, (c: Array[Cell]) =>
       for {
         i <- 0 until Board.Size
       } yield cells(boardPos(i, idx)))
@@ -17,6 +17,6 @@ class Column(cells: Array[Int], idx: Int) {
 
 object Column {
 
-  def apply(cells: Array[Int], idx: Int): Column = new Column(cells, idx)
+  def apply(cells: Array[Cell], idx: Int): Column = new Column(cells, idx)
 
 }
