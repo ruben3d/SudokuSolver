@@ -32,5 +32,9 @@ object SudokuSolver extends App {
 
     println("Board D:")
     debugPrintBoard(boardD)
+
+    val boardE = boardD.mutate(0.1)
+    println("Board E:")
+    debugPrintBoard(boardE)
   })
 }

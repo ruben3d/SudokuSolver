@@ -74,6 +74,15 @@ class Board(val cells: Array[Cell]) {
 
     (Board(cells0), Board(cells1))
   }
+
+  def mutate(probability: Double): Board = {
+    val newCells = cells.map(cell => cell match {
+      case Empty         => Empty
+      case LockedCell(v) => LockedCell(v)
+      case FreeCell(v)   => if (Random.nextDouble() < probability) FreeCell(Random.nextInt(Board.Valid) + 1) else FreeCell(v)
+    }).toArray[Cell]
+    Board(newCells)
+  }
 }
 
 object Board {
