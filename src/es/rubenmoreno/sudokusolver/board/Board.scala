@@ -88,6 +88,7 @@ class Board(val cells: Array[Cell]) {
 object Board {
   val Size = 9
   val Valid = 9
+  val WorstScore = 2187
 
   def apply(cells: Array[Cell]): Board = new Board(cells)
 
