@@ -25,7 +25,7 @@ object SudokuSolver extends App {
     println("Board B:")
     debugPrintBoard(boardB)
 
-    val (boardC, boardD) = boardA cross boardB
+    val boardC::boardD::Nil = boardA cross boardB
 
     println("Board C:")
     debugPrintBoard(boardC)

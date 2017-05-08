@@ -65,14 +65,14 @@ class Board(val cells: Array[Cell]) {
     Board(newCells)
   }
 
-  def cross(that: Board): (Board, Board) = {
+  def cross(that: Board): Seq[Board] = {
     val pivot = Random.nextInt(cells.length)
     val seg0 = cells.splitAt(pivot)
     val seg1 = that.cells.splitAt(pivot)
     val cells0 = seg0._1 ++ seg1._2
     val cells1 = seg1._1 ++ seg0._2
 
-    (Board(cells0), Board(cells1))
+    List(Board(cells0), Board(cells1))
   }
 
   def mutate(probability: Double): Board = {
