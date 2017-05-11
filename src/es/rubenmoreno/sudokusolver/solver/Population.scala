@@ -26,8 +26,12 @@ class Population(val smpls: Array[Board]) {
     new Population(newSamples toArray)
   }
 
-  // @TODO: Best scored samples should be more probable
-  private def pickCandidate: Int = Random.nextInt(samples.length)
+  private def pickCandidate: Int = {
+    val x = Random.nextDouble()
+    //val y = -1 * (math.sqrt(1 - x*x) - 1) // easeInCirc
+    val y = x * x // easeInQuad
+    math.round(y * samples.length).toInt max 0 min (samples.length - 1)
+  }
 
   // @TODO: Avoid duplicates
   private def pickPair: (Int, Int) = (pickCandidate, pickCandidate)
