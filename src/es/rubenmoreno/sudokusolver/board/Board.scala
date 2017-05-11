@@ -77,9 +77,8 @@ class Board(val cells: Array[Cell]) {
 
   def mutate(probability: Double): Board = {
     val newCells = cells.map(cell => cell match {
-      case Empty         => Empty
-      case LockedCell(v) => LockedCell(v)
-      case FreeCell(v)   => if (Random.nextDouble() < probability) FreeCell(Random.nextInt(Board.Valid) + 1) else FreeCell(v)
+      case FreeCell(v) => if (Random.nextDouble() < probability) FreeCell(Random.nextInt(Board.Valid) + 1) else cell
+      case _           => cell
     }).toArray[Cell]
     Board(newCells)
   }

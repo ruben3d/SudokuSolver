@@ -15,13 +15,11 @@ class Population(val smpls: Array[Board]) {
     val pairCount = samples.length / 2
     val singleCount = samples.length % 2
 
-    val pairs = for {
-      i <- 1 to pairCount toList
-    } yield cross(pickPair)
+    val pairs = (1 to pairCount).toList.flatMap(i => cross(pickPair, probability))
 
-    val single = if (singleCount > 0) List(samples(pickCandidate)) else Nil
+    val single = if (singleCount > 0) List(samples(pickCandidate).mutate(probability)) else Nil
 
-    val newSamples = mutate(single ++ pairs.flatten.toList, probability)
+    val newSamples = single ++ pairs
 
     new Population(newSamples toArray)
   }
@@ -33,12 +31,12 @@ class Population(val smpls: Array[Board]) {
     math.round(y * samples.length).toInt max 0 min (samples.length - 1)
   }
 
-  // @TODO: Avoid duplicates
   private def pickPair: (Int, Int) = (pickCandidate, pickCandidate)
 
-  private def cross(pair: (Int, Int)) = samples(pair._1) cross samples(pair._2)
-
-  private def mutate(samples: Seq[Board], probability: Double) = samples.map(_.mutate(probability))
+  private def cross(pair: (Int, Int), probability: Double) = {
+    val p = samples(pair._1) cross samples(pair._2)
+    p map(_ mutate probability)
+  }
 }
 
 object Population {
