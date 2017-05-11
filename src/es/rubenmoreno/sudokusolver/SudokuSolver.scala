@@ -3,6 +3,8 @@ package es.rubenmoreno.sudokusolver
 import es.rubenmoreno.sudokusolver.board.Board
 import es.rubenmoreno.sudokusolver.board.debugPrintBoard
 import es.rubenmoreno.sudokusolver.board.debugPrintLoadedBoard
+import es.rubenmoreno.sudokusolver.solver.Settings
+import es.rubenmoreno.sudokusolver.solver.Solver
 
 object SudokuSolver extends App {
 
@@ -25,7 +27,7 @@ object SudokuSolver extends App {
     println("Board B:")
     debugPrintBoard(boardB)
 
-    val boardC::boardD::Nil = boardA cross boardB
+    val boardC :: boardD :: Nil = boardA cross boardB
 
     println("Board C:")
     debugPrintBoard(boardC)
@@ -36,5 +38,11 @@ object SudokuSolver extends App {
     val boardE = boardD.mutate(0.1)
     println("Board E:")
     debugPrintBoard(boardE)
+
+    val solver = new Solver(Settings(1000, 500, 0.04, 0.04))
+    val best = solver solve board
+
+    println("Best:")
+    debugPrintBoard(best)
   })
 }
